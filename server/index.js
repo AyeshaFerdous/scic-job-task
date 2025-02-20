@@ -26,9 +26,16 @@ async function run() {
     const db = client.db("scic-job-task");
     const userCollection = db.collection("users");
 
-    app.post('/users', async(req,res)=>{
-        const users = req.body;
-        const result = await userCollection.insertOne(users)
+    app.post('/users/:email', async(req,res)=>{
+      const email = req.params.email;
+      const query = {email}
+        const user = req.body;
+
+        const isExist = await userCollection.findOne(query)
+        if(isExist){
+          return res.send(isExist)
+        }
+        const result = await userCollection.insertOne(user)
         res.send(result)
     })
 

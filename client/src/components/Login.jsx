@@ -4,20 +4,41 @@ import { useNavigate } from "react-router-dom";
 import auth from "../../firebase.config";
 import { toast } from "react-toastify";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import login from '../assets/Login.jpg';
+import login from "../assets/Login.jpg";
 import { FcGoogle } from "react-icons/fc";
+import axios from "axios";
 
 const Login = () => {
   const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const googleProvider = new GoogleAuthProvider();
 
   const handleGoogle = () => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
-        setUser(result.user);
-        toast("Google login Successful!");
+        const loggedInUser = result.user;
+        const userInfo = {
+          email: loggedInUser?.email,
+          image: loggedInUser?.photoURL,
+          name: loggedInUser?.displayName,
+        };
+       
+        // send the data in the backend
+        axios.post(`http://localhost:5000/users/${loggedInUser?.email}`, userInfo)
+          .then(response => {
+            if(response.data.insertedId){
+              toast(`${loggedInUser?.displayName} is saved in a database`);
+            }
+            else{
+              toast.warning(`${loggedInUser?.displayName} is already exists in a database`);
+            }
+          })
+          .catch(error => {
+            console.error("Error saving user:", error);
+          });
+
+        setUser(loggedInUser);
+        toast.success("Google login Successful!");
         navigate("/");
       })
       .catch(() => {
