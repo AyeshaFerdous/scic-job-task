@@ -25,6 +25,7 @@ async function run() {
 
     const db = client.db("scic-job-task");
     const userCollection = db.collection("users");
+    const taskCollection = db.collection("task");
 
     app.post('/users/:email', async(req,res)=>{
       const email = req.params.email;
@@ -39,6 +40,11 @@ async function run() {
         res.send(result)
     })
 
+    app.post('/add-tasks', async(req,res)=>{
+      const task = req.body;
+      const result = await taskCollection.insertOne(task)
+      res.send(result)
+    })
 
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
