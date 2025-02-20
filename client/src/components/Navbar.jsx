@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { FaHamburger } from "react-icons/fa";
+import { useContext } from "react";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const Navbar = () => {
-  const handleLogout = () => {
-    console.log("Logging out...");
-  };
+  const { user, logOut } = useContext(AuthContext);
 
   return (
     <div className="bg-black">
@@ -13,16 +13,22 @@ const Navbar = () => {
 
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn m-1">
-          <FaHamburger />
+            <FaHamburger />
           </div>
           <ul
             tabIndex={0}
             className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
           >
-            <li>
-              <Link to='/login'>Login</Link>
-            </li>
-            
+            {user && user?.email  ? (
+               <li>
+               <Link onClick={logOut}>Logout</Link>
+             </li>
+             
+            ) : (
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
