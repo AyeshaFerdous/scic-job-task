@@ -20,7 +20,7 @@ const AddTask = () => {
       
           try {
             // 1. make a post request
-            await axios.post("http://localhost:5000/add-tasks", taskData)
+            await axios.post("https://scic-server-peach.vercel.app/add-tasks", taskData)
             // 2. Reset form
             form.reset()
             // 3. Show toast and navigate

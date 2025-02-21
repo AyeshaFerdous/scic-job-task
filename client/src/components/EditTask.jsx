@@ -11,7 +11,7 @@ const EditTask = () => {
     // Fetch task data by ID
     const fetchTask = async () => {
        
-            const response = await axios.get(`http://localhost:5000/tasks/${taskId}`);
+            const response = await axios.get(`https://scic-server-peach.vercel.app/tasks/${taskId}`);
             setTask(response.data);
       
     };
@@ -25,7 +25,7 @@ const EditTask = () => {
     e.preventDefault();
    
         // Send updated task to the backend
-        const response = await axios.patch(`http://localhost:5000/task/${taskId}`, {
+        const response = await axios.patch(`https://scic-server-peach.vercel.app/task/${taskId}`, {
             title: task.title,
             description: task.description,
         });

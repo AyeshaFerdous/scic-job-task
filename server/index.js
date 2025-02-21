@@ -40,8 +40,10 @@ async function run() {
     });
 
     app.get("/tasks", async (req, res) => {
-      const tasks = await taskCollection.find().toArray();
-      res.send(tasks);
+     
+       const result = await taskCollection.find().toArray();
+      
+      res.send(result);
     });
 
     app.post("/add-tasks", async (req, res) => {
@@ -50,16 +52,34 @@ async function run() {
       res.send(result);
     });
 
-    app.patch("/tasks/:id", async (req, res) => {
-      const { id } = req.params;
-      const { category } = req.body;
+    app.put("/tasks/reorder", async (req, res) => {
+      const { tasks } = req.body;
 
-      const result = await taskCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { category } }
-      );
+      console.log("Received reorder request with tasks:", tasks);
 
-      res.send(result);
+      try {
+        // Update each task's order and category in the database
+        for (const task of tasks) {
+          console.log("Updating task:", task);
+
+          const updateResult = await taskCollection.updateOne(
+            { _id: new ObjectId(task._id) }, 
+            { $set: { order: parseInt(task.order), category: task.category } } 
+          );
+
+          console.log("Update result for task:", updateResult);
+
+          // Check if the task was updated
+          if (updateResult.matchedCount === 0) {
+            console.error("Task not found:", task._id);
+          }
+        }
+
+        res.status(200).json({ message: "Tasks reordered successfully" });
+      } catch (error) {
+        console.error("Error reordering tasks:", error);
+        res.status(500).json({ message: "Error reordering tasks", error });
+      }
     });
 
     app.get("/tasks/:id", async (req, res) => {

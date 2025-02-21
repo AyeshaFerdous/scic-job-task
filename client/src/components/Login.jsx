@@ -24,7 +24,7 @@ const Login = () => {
         };
        
         // send the data in the backend
-        axios.post(`http://localhost:5000/users/${loggedInUser?.email}`, userInfo)
+        axios.post(`https://scic-server-peach.vercel.app/users/${loggedInUser?.email}`, userInfo)
           .then(response => {
             if(response.data.insertedId){
               toast(`${loggedInUser?.displayName} is saved in a database`);

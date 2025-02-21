@@ -6,14 +6,13 @@ import { toast } from "react-toastify";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+ 
   const navigate = useNavigate();
 
   // Fetch tasks from the backend
   const fetchTasks = async () => {
   
-      const response = await axios.get("http://localhost:5000/tasks");
+      const response = await axios.get("https://scic-server-peach.vercel.app/tasks");
       setTasks(response.data);
     
   };
@@ -55,7 +54,7 @@ const TaskList = () => {
 
     const deletedTask = tasks.filter((task) => task._id !== id); 
   setTasks(deletedTask); 
-    const { data } = await axios.delete(`http://localhost:5000/tasks/${id}`);
+    const { data } = await axios.delete(`https://scic-server-peach.vercel.app/tasks/${id}`);
     if (data.deletedCount > 0) {
       toast.success("Task deleted successfully");
     }
@@ -65,13 +64,7 @@ const TaskList = () => {
     navigate(`/edit-task/${id}`); 
   };
 
-  if (loading) {
-    return <div className="text-center mt-8">Loading tasks...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center mt-8 text-red-500">{error}</div>;
-  }
+ 
 
   return (
     <div className="p-4">
