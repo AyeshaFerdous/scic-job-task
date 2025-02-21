@@ -4,18 +4,32 @@ import {
 import App from "../App";
 import Login from "../components/Login";
 import AddTask from "../components/AddTask";
+import Home from "../components/Home";
+import TaskList from "../components/TaskList";
+import EditTask from "../components/EditTask";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,  // App serves as the layout for the entire app
+    element: <App />,  
     children: [
       {
-        path: "add-task",
-        element: <AddTask />,  // AddTask component will be rendered inside the Outlet
+        path: "/",
+        element: <Home />,
       },
-      
+      {
+        path: "/add-task",
+        element: <AddTask />, 
+      },
+      {
+        path : "/edit-task",
+        element : <TaskList/>
+      },
+      {
+        path : "/edit-task/:taskId",
+        element : <EditTask/>
+      },
       
     ],
     
